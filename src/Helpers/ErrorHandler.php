@@ -1,0 +1,22 @@
+<?php
+
+    namespace App\Helpers;
+
+    class ErrorHandler{
+
+        private static function TerminateWithMessage($message){
+            echo "\e[31mError: \e[0m" . $message . "\n";
+            exit();
+        }
+
+        public static function ColumnValidationError($tableName, $columName, $propertiesString){
+            
+            $message = "Expression invalid in " . ucwords($tableName) . ".php: " . $columName . " => " . $propertiesString; 
+
+            ErrorHandler::TerminateWithMessage($message);
+
+        }
+
+    }
+
+?>

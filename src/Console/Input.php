@@ -15,18 +15,7 @@
         private $input = [];
 
         
-        /**
-         * Input constructor will shift $argv array so that first arg
-         * is ommited in $input array. First argument is artisan.
-         * 
-         * 
-         * @param $argv
-         * Global $argv array
-         */
-
-         
-        public function __construct($argv)
-        {
+        public function __construct($argv){
             array_shift($argv);
             $this->input = $argv;
 
@@ -44,7 +33,6 @@
             $path = "/src/Executes";
 
             $files = $this->readDir($path);
-
 
             $commandParts = explode(':', $this->input[0]);
 

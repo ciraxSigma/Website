@@ -2,7 +2,13 @@
 
     namespace App\Connection;
 
-    class Migration{
+    use App\Helpers\SuccessHandler;
+    use App\Interfaces\FilesInterface;
+    use App\Helpers\Files;
+
+    class Migration implements FilesInterface{
+
+        use Files;
 
         private $dbAccess;
         private $queryBuilder;
@@ -19,6 +25,14 @@
 
             foreach($queries as $query){
                 $this->dbAccess->executeQuery($query);
+            }
+
+            
+
+            if($tablesToMigrate == null){
+                SuccessHandler::migrationSucceeded($this->readDir('/database/tables'));
+            }else{
+                SuccessHandler::migrationSucceeded($tablesToMigrate);
             }
             
         }

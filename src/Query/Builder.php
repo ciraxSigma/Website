@@ -4,6 +4,7 @@
 
     use App\Helpers\Files;
     use App\Interfaces\FilesInterface;
+    use App\Helpers\ErrorHandler;
 
     class Builder implements FilesInterface{
 
@@ -68,6 +69,10 @@
                             break;
                         case "nullable":
                             $currentTypeArr["nullable"] = "NULL";
+                            break;
+                        default:
+                            ErrorHandler::ColumnValidationError($tableName, $columnName, $propertiesString);
+                            
                     }
 
                 }
@@ -143,8 +148,6 @@
                 $lowerCaseTableName = lcfirst($table);
 
                 $tableQueries[] = "DROP TABLE $lowerCaseTableName";
-
-                
 
             }
 
