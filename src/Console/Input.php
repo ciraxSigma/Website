@@ -3,24 +3,26 @@
     namespace App\Console;
     
     use App\Helpers\Files;
-    use App\Interfaces\FilesInterface;
 
-    class Input implements FilesInterface{
+    class Input{
         
-        use Files;
-
         /**
          * Array of arguments
          */
         private $input = [];
 
+        private $fileController;
         
         public function __construct($argv){
+
             array_shift($argv);
+
             $this->input = $argv;
 
+            $this->fileController = new Files();
+
             if($command = $this->validateInput()){
-                require($this->getBasePath() . "/src/Executes/" . $command . ".php");
+                require($this->fileController->getBasePath() . "/src/Executes/" . $command . ".php");
             }
             else{
                 echo "This command doesn't exist! \n";
@@ -32,7 +34,7 @@
 
             $path = "/src/Executes";
 
-            $files = $this->readDir($path);
+            $files = $this->fileController->readDir($path);
 
             $commandParts = explode(':', $this->input[0]);
 

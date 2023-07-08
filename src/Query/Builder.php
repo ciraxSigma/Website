@@ -3,35 +3,27 @@
     namespace App\Query;
 
     use App\Helpers\Files;
-    use App\Interfaces\FilesInterface;
     use App\Helpers\ErrorHandler;
 
-    class Builder implements FilesInterface{
+    class Builder{
 
-        use Files;
+        private $fileController;
+
+        public function __construct(){
+            $this->fileController = new Files();
+        }
         
 
         public function buildTableQueries($tablesToMigrate = null){
 
             $tableQueries = [];
-            $tables = [];
-
-            if($tablesToMigrate == null){
-
-                $tables = $this->readDir('/database/tables');
-
-            }else{
-
-                $tables = $tablesToMigrate;
-
-            }
             
 
-            foreach($tables as $table){
+            foreach($tablesToMigrate as $table){
 
-                $tableFileName = $this->addExtension($table);
+                $tableFileName = $this->fileController->addExtension($table);
 
-                $columnProperties = require($this->makePath("/database/tables/" . $tableFileName));
+                $columnProperties = require($this->fileController->makePath("/database/tables/" . $tableFileName));
 
                 $tableQueries[] = $this->resolveTableColumnProperties($columnProperties, lcfirst($table));
             }
@@ -131,17 +123,9 @@
         public function deleteTableQueries($tablesToDelete = null){
 
             $tableQueries = [];
-            $tables = [];
+            $tables = $tablesToDelete;
 
-            if($tablesToDelete == null){
-
-                $tables = $this->readDir('/database/tables');
-
-            }else{
-
-                $tables = $tablesToDelete;
-
-            }
+            
 
             foreach($tables as $table){
                 
@@ -151,12 +135,12 @@
 
             }
 
-            foreach ($tableQueries as $query){
-                echo $query . "\n";
-            }
-
             return $tableQueries;
 
+        }
+
+        public function getAllTablesQuery(){
+            return "SHOW TABLES";
         }
 
     }

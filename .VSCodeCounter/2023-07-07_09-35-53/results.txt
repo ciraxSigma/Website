@@ -1,0 +1,42 @@
+Date : 2023-07-07 09:35:53
+Directory : /home/cira/Desktop/server/src
+Total : 12 files,  340 codes, 4 comments, 208 blanks, all 552 lines
+
+Languages
++----------+------------+------------+------------+------------+------------+
+| language | files      | code       | comment    | blank      | total      |
++----------+------------+------------+------------+------------+------------+
+| PHP      |         12 |        340 |          4 |        208 |        552 |
++----------+------------+------------+------------+------------+------------+
+
+Directories
++-------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                        | files      | code       | comment    | blank      | total      |
++-------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                           |         12 |        340 |          4 |        208 |        552 |
+| Connection                                                  |          2 |         68 |          0 |         39 |        107 |
+| Console                                                     |          1 |         31 |          3 |         22 |         56 |
+| Executes                                                    |          3 |         36 |          0 |         27 |         63 |
+| Helpers                                                     |          3 |         61 |          0 |         30 |         91 |
+| Interfaces                                                  |          1 |         10 |          0 |          4 |         14 |
+| Query                                                       |          2 |        134 |          1 |         86 |        221 |
++-------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++-------------------------------------------------------------+----------+------------+------------+------------+------------+
+| filename                                                    | language | code       | comment    | blank      | total      |
++-------------------------------------------------------------+----------+------------+------------+------------+------------+
+| /home/cira/Desktop/server/src/Connection/Delete.php         | PHP      |         23 |          0 |         15 |         38 |
+| /home/cira/Desktop/server/src/Connection/Migration.php      | PHP      |         45 |          0 |         24 |         69 |
+| /home/cira/Desktop/server/src/Console/Input.php             | PHP      |         31 |          3 |         22 |         56 |
+| /home/cira/Desktop/server/src/Executes/DeleteTables.php     | PHP      |         10 |          0 |          9 |         19 |
+| /home/cira/Desktop/server/src/Executes/MakeTables.php       | PHP      |         14 |          0 |          9 |         23 |
+| /home/cira/Desktop/server/src/Executes/MigrateTables.php    | PHP      |         12 |          0 |          9 |         21 |
+| /home/cira/Desktop/server/src/Helpers/ErrorHandler.php      | PHP      |         13 |          0 |          9 |         22 |
+| /home/cira/Desktop/server/src/Helpers/Files.php             | PHP      |         33 |          0 |         13 |         46 |
+| /home/cira/Desktop/server/src/Helpers/SuccessHandler.php    | PHP      |         15 |          0 |          8 |         23 |
+| /home/cira/Desktop/server/src/Interfaces/FilesInterface.php | PHP      |         10 |          0 |          4 |         14 |
+| /home/cira/Desktop/server/src/Query/Builder.php             | PHP      |        102 |          0 |         61 |        163 |
+| /home/cira/Desktop/server/src/Query/DatabaseAccess.php      | PHP      |         32 |          1 |         25 |         58 |
+| Total                                                       |          |        340 |          4 |        208 |        552 |
++-------------------------------------------------------------+----------+------------+------------+------------+------------+

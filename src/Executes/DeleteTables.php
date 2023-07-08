@@ -1,10 +1,8 @@
 <?php
 
     use App\Connection\Delete;
-    use App\Query\Builder;
-    use App\Query\DatabaseAccess;
 
-    $delete = new Delete(new DatabaseAccess(), new Builder());
+    $delete = new Delete();
 
     if(count($argv) == 1){
 

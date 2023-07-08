@@ -2,26 +2,42 @@
 
     namespace App\Connection;
 
+    use App\Query\DatabaseAccess;
+    use App\Query\Builder;
+    use App\Helpers\SuccessHandler;
+
+
     class Delete{
 
         private $dbAccess;
         private $queryBuilder;
 
-        public function __construct($dbAccess, $queryBuilder)
+        public function __construct()
         {
-            $this->dbAccess = $dbAccess;
-            $this->queryBuilder = $queryBuilder;
+            $this->dbAccess = new DatabaseAccess();
+            $this->queryBuilder = new Builder();
         }
 
         public function deleteTables($tablesToDelete = null){
+
+            $queries = [];
+
+            if($tablesToDelete == null){
+                $getAllTablesQuery = $this->queryBuilder->getAllTablesQuery();
+                $tablesToDelete = $this->dbAccess->executeReturnQuery($getAllTablesQuery);
+            }
+
+            $queries = $this->queryBuilder->deleteTableQueries($tablesToDelete);
             
-            $quries = $this->queryBuilder->deleteTableQueries($tablesToDelete);
+            
 
-            foreach($quries as $query){
+            foreach($queries as $query){
 
-                $this->dbAccess->executeQuery($query);
+                $this->dbAccess->executeNoReturnQuery($query);
                 
             }
+
+            SuccessHandler::deleteSucceeeded($tablesToDelete);
             
         }
 

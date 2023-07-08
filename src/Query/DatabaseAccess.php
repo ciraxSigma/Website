@@ -16,7 +16,6 @@
             try {
                 $this->mysqli = new mysqli($_ENV['DB_HOST'], $_ENV['DB_USER'], $_ENV['DB_PASSWORD'], $_ENV['DB_NAME']);
             } catch (Exception $e) {
-                // Handle the exception, log an error, or display a message
                 echo "Error connecting to the database: " . $e->getMessage();
             }
             
@@ -27,13 +26,32 @@
         }
 
 
-        public function executeQuery($query){
+        public function executeNoReturnQuery($query){
             
             $stmt = $this->mysqli->prepare($query);
             
             $stmt->execute();
 
         }
+
+        public function executeReturnQuery($query){
+
+            $stmt = $this->mysqli->prepare($query);
+
+            $stmt->execute();
+
+            $mysqliResult = $stmt->get_result();
+
+            $results = [];
+            
+            while($row = $mysqliResult->fetch_assoc()){
+                $results[] = $row['Tables_in_' . $_ENV["DB_NAME"]];
+            }
+
+            return $results;
+
+        }
+
     }
 
 ?>

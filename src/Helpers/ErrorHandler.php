@@ -17,6 +17,11 @@
 
         }
 
+        public static function tableAlreadyExistsError(){
+            $message = "Table already exists in database";
+            ErrorHandler::TerminateWithMessage($message);
+        }
+
     }
 
 ?>

@@ -12,7 +12,17 @@
 
             foreach($tablesToMigrate as $tableName){
                 $tableName = lcfirst($tableName);
-                $message = "Table $tableName was successfully migrated";
+                $message = "Table \e[90m$tableName\e[0m was successfully migrated";
+                SuccessHandler::successMessage($message);
+            }
+
+        }
+
+        public static function deleteSucceeeded($tablesToDelete){
+
+            foreach($tablesToDelete as $tableName){
+                $tableName = lcfirst($tableName);
+                $message = "Table \e[90m$tableName\e[0m was successfully deleted";
                 SuccessHandler::successMessage($message);
             }
 

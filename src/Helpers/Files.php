@@ -2,7 +2,7 @@
 
     namespace App\Helpers;
     
-    trait Files{
+    class Files{
 
         public function getBasePath(){
             return __DIR__ . '/../..';
@@ -28,6 +28,18 @@
 
         public function makePath($path){
             return $this->getBasePath() . $path;
+        }
+
+        public function writeTableTemplateFile($fileNameWE){
+            $fileName = $this->addExtension($fileNameWE);
+            $path = $this->makePath('/database/tables/'). $fileName;
+            $tableFile = fopen($path, "w");
+
+            $tableFileTemplate = file_get_contents($this->makePath('/src/Templates/TableTemplate.temp'));
+
+            fwrite($tableFile, $tableFileTemplate);
+            
+            fclose($tableFile);
         }
     }
 
