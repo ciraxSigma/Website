@@ -2,7 +2,7 @@
 
     use Framework\Models\Model;
 
-    class {{className}} extends Model{
+    class Comment extends Model{
 
         protected $table = "example";
     }

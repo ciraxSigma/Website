@@ -4,6 +4,18 @@
     
     class Files{
 
+        private function resolveTempKeys($tempContent, $keys){
+
+            foreach($keys as $key => $value){
+                if($key == "className"){
+                    $tempContent = str_replace("{{className}}", $value, $tempContent);
+                }
+            }
+
+            return $tempContent;
+
+        }
+
         public function getBasePath(){
             return __DIR__ . '/../..';
         }
@@ -40,6 +52,19 @@
             fwrite($tableFile, $tableFileTemplate);
             
             fclose($tableFile);
+        }
+
+        public function writeModelTemplateFile($fileNameWE){
+            $fileName = $this->addExtension($fileNameWE);
+            $path = $this->makePath("/models/") . $fileName;
+
+            $modelFile = fopen($path, "w");
+
+            $modelFileTemplate = file_get_contents($this->makePath("/src/Templates/ModelTemplate.temp"));
+
+            fwrite($modelFile, $this->resolveTempKeys($modelFileTemplate, array("className" => $fileNameWE)));
+
+            fclose($modelFile);
         }
     }
 

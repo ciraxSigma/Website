@@ -22,6 +22,11 @@
             ErrorHandler::TerminateWithMessage($message);
         }
 
+        public static function tableDoesntExistsError(){
+            $message = "Table doesn't exists";
+            ErrorHandler::TerminateWithMessage($message);
+        }
+
     }
 
 ?>

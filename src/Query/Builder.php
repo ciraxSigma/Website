@@ -88,41 +88,42 @@
         private function makeColumnsSql($formatedColumnProperties, $tableName){
 
             $sql = "";
-            $counter = 0;
+
+            $properties = [];
+            $additionalProps = [];
 
             foreach($formatedColumnProperties as $formatedColumnProperty){
-                $counter++;
                     
+                $currentProperties = [];
+
                 if(isset($formatedColumnProperty['name'])){
-                    $sql .= $formatedColumnProperty['name'] . " ";
+                    $currentProperties[] = $formatedColumnProperty['name'];
                 }
 
                 if(isset($formatedColumnProperty['type'])){
-                    $sql .= $formatedColumnProperty['type']  . " ";
+                    $currentProperties[] = $formatedColumnProperty['type'];
                 }
 
                 if(isset($formatedColumnProperty['nullable'])){
-                    $sql .= "NULL ";
+                    $currentProperties[] = $formatedColumnProperty['nullable'];
                 }else{
-                    $sql .= "NOT NULL ";
+                    $currentProperties[] = "NOT NULL";
                 }
 
                 if(isset($formatedColumnProperty['auto_increment'])){
-                    $sql .= $formatedColumnProperty['auto_increment']  . " ";
+                    $currentProperties[] = $formatedColumnProperty['auto_increment'];
+                }
+
+                if(isset($formatedColumnProperty['key'])){
+                    $additionalProps[] = $formatedColumnProperty['key'];
                 }
                 
-                if($counter != count($formatedColumnProperties)){
-                    $sql .= ', ';
-                }
-                
+                $properties[] = implode(" ", $currentProperties);
             }
 
-            foreach($formatedColumnProperties as $formatedColumnProperty){
-                if(isset($formatedColumnProperty['key'])){
-                    $sql .= ', '. $formatedColumnProperty['key'];
-                    break;
-                }
-            }
+            $properties = array_merge($properties, $additionalProps);
+
+            $sql = implode(", ", $properties);
 
             return "CREATE TABLE $tableName ($sql)";
         }
@@ -157,20 +158,9 @@
                 $columnsArray[] = '*'; 
             }
 
-            $counter = 0;
             $columnsString = '';
 
-            foreach($columnsArray as $column){
-
-                $counter++;
-
-                if($counter != count($columnsArray)){
-                    $columnsString .= $column . ", ";
-                }else{
-                    $columnsString .= $column;
-                }
-
-            }
+            $columnsString = implode(", ", $columnsArray);
 
             $this->queries = "SELECT $columnsString FROM $tableName ";
         }

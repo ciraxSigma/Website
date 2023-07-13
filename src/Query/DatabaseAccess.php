@@ -5,7 +5,7 @@
 
     use mysqli;
     use Exception;
-
+use Framework\Helpers\ErrorHandler;
 
     class DatabaseAccess{
 
@@ -16,7 +16,7 @@
             try {
                 $this->mysqli = new mysqli($_ENV['DB_HOST'], $_ENV['DB_USER'], $_ENV['DB_PASSWORD'], $_ENV['DB_NAME']);
             } catch (Exception $e) {
-                echo "Error connecting to the database: " . $e->getMessage();
+                $e->getMessage();
             }
             
             if($this->mysqli->connect_errno){
@@ -99,11 +99,18 @@
 
             $combinedArray = array_merge(array($types), $colValues);
 
-            $stmt = $this->mysqli->prepare($query);   
-                
+            if($stmt = $this->mysqli->prepare($query)){
+
             call_user_func_array(array($stmt, 'bind_param'), $this->passArrayByRef($combinedArray));
 
             $stmt->execute();
+
+            }else{
+                ErrorHandler::tableDoesntExistsError();
+            }
+                      
+              
+
         }
 
         public function passArrayByRef($array){

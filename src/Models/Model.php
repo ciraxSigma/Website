@@ -5,23 +5,21 @@
     use Framework\Query\DatabaseAccess;
     use Framework\Query\Builder;
 
-
     class Model{
 
         private $dbAccess;
         private $queryBuilder;
 
         
-        protected $table = 'users';
+        protected $table = '';
 
         public function __construct(){
             $this->dbAccess = new DatabaseAccess();
             $this->queryBuilder = new Builder();
         }
 
-        public function getAll(){
-            $this->queryBuilder->getModelQuery($this->table);
-            return $this;
+        public function getAll($columnsArray = null){
+            return $this->start($columnsArray)->getData();
         }
 
         public function start($columnsArray = null){
@@ -53,4 +51,5 @@
         }
 
     }
+
 ?>

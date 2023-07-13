@@ -1,23 +1,12 @@
 <?php
 
-    class User{
+    use Framework\Models\Model;
 
-        public function get(){
-            
-        }
+    class User extends Model{
 
-        public function validate(){
-
-        }
-
-        public function getall(){
-
-        }
-
-        public function create(){
-
-        }
+        protected $table = "users";
 
     }
 
-?>
+
+?> 
