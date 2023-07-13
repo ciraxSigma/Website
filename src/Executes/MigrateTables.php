@@ -1,8 +1,8 @@
 <?php
 
-    use App\Connection\Migration;
-    use App\Query\Builder;
-    use App\Query\DatabaseAccess;
+    use Framework\Connection\Migration;
+    use Framework\Query\Builder;
+    use Framework\Query\DatabaseAccess;
 
     $migration = new Migration(new DatabaseAccess(), new Builder());
 

@@ -1,13 +1,16 @@
 <?php
 
-    namespace App\Query;
 
-    use App\Helpers\Files;
-    use App\Helpers\ErrorHandler;
+    namespace Framework\Query;
+
+    use Framework\Helpers\Files;
+    use Framework\Helpers\ErrorHandler;
 
     class Builder{
 
         private $fileController;
+
+        private $queries;
 
         public function __construct(){
             $this->fileController = new Files();
@@ -18,6 +21,9 @@
 
             $tableQueries = [];
             
+            if($tablesToMigrate == null){
+                $tablesToMigrate = $this->fileController->readDir('/database/tables');
+            }
 
             foreach($tablesToMigrate as $table){
 
@@ -28,8 +34,9 @@
                 $tableQueries[] = $this->resolveTableColumnProperties($columnProperties, lcfirst($table));
             }
 
-            return $tableQueries;
+            $this->queries = $tableQueries;
 
+            return $this;
         }
 
 
@@ -135,14 +142,86 @@
 
             }
 
-            return $tableQueries;
-
+            $this->queries =  $tableQueries;
+            return $this;
         }
 
         public function getAllTablesQuery(){
-            return "SHOW TABLES";
+            $this->queries = "SHOW TABLES";
+            return $this;
         }
 
+        public function getModelQuery($tableName, $columnsArray = null){
+
+            if($columnsArray == null){
+                $columnsArray[] = '*'; 
+            }
+
+            $counter = 0;
+            $columnsString = '';
+
+            foreach($columnsArray as $column){
+
+                $counter++;
+
+                if($counter != count($columnsArray)){
+                    $columnsString .= $column . ", ";
+                }else{
+                    $columnsString .= $column;
+                }
+
+            }
+
+            $this->queries = "SELECT $columnsString FROM $tableName ";
+        }
+
+        public function getQuery(){
+            return $this->queries;
+        }
+
+        public function where($columnName, $operator, $value){
+
+            if(gettype($value) == "string"){
+                $this->queries .= "WHERE $columnName $operator '$value' ";
+            }else{
+                $this->queries .= "WHERE $columnName $operator $value ";
+            }
+        }
+
+        public function and($columnName, $operator, $value){
+
+            if(gettype($value) == "string"){
+                $this->queries .= "AND $columnName $operator '$value' ";
+            }else{
+                $this->queries .= "AND $columnName $operator $value ";
+            }
+        }
+
+        public function or($columnName, $operator, $value){
+
+            if(gettype($value) == "string"){
+                $this->queries .= "OR $columnName $operator '$value' ";
+            }else{
+                $this->queries .= "OR $columnName $operator $value ";
+            }
+        }
+
+        public function create($colValues, $tableName){
+
+            $columns = implode(', ', array_keys($colValues));
+
+            $values = [];
+            
+            for($i = 0; $i < count($colValues); $i++){
+                $values[] = "?";
+            }
+
+            $values = implode(", ", $values);
+
+            $query = "INSERT INTO $tableName ($columns) VALUES ($values)";
+            
+            return $query;
+        }
     }
 
 ?>

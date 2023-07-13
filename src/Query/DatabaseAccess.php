@@ -1,7 +1,7 @@
 <?php
 
 
-    namespace App\Query;
+    namespace Framework\Query;
 
     use mysqli;
     use Exception;
@@ -25,7 +25,6 @@
 
         }
 
-
         public function executeNoReturnQuery($query){
             
             $stmt = $this->mysqli->prepare($query);
@@ -34,7 +33,7 @@
 
         }
 
-        public function executeReturnQuery($query){
+        public function executeGetAllTablesQuery($query){
 
             $stmt = $this->mysqli->prepare($query);
 
@@ -52,6 +51,70 @@
 
         }
 
+        public function getData($query = null){
+            
+            $stmt = $this->mysqli->prepare($query);
+
+            $stmt->execute();
+
+            $mysqliResult = $stmt->get_result();
+
+            $usersData = [];
+
+            while($row = $mysqliResult->fetch_assoc()){
+
+                $currentUserData = [];
+                
+                foreach($row as $key => $value){
+                    $currentUserData[$key] = $value;
+                }
+
+                $usersData[] = $currentUserData;
+
+            }
+
+            return $usersData;
+
+        }
+
+        public function createRecord($query, $colValues){
+            
+            $types = '';
+
+            foreach($colValues as $key => $value){
+
+                if(is_int($value)){
+                    $types .= 'i';
+                }
+                
+                if(is_float($value) || is_double($value)){
+                    $types .= 'd';
+                }
+
+                if(is_string($value)){
+                    $types .= 's';
+                }
+
+            }
+
+            $combinedArray = array_merge(array($types), $colValues);
+
+            $stmt = $this->mysqli->prepare($query);   
+                
+            call_user_func_array(array($stmt, 'bind_param'), $this->passArrayByRef($combinedArray));
+
+            $stmt->execute();
+        }
+
+        public function passArrayByRef($array){
+            $refs = [];
+            foreach ($array as $key => $value) {
+                $refs[] = &$array[$key];
+            }
+            return $refs;
+        }
+
     }
+
 
 ?>

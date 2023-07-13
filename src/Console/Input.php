@@ -1,8 +1,8 @@
 <?php
 
-    namespace App\Console;
+    namespace Framework\Console;
     
-    use App\Helpers\Files;
+    use Framework\Helpers\Files;
 
     class Input{
         

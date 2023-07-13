@@ -1,6 +1,6 @@
 <?php
 
-    use App\Connection\Delete;
+    use Framework\Connection\Delete;
 
     $delete = new Delete();
 

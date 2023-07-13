@@ -2,8 +2,8 @@
 
     require_once __DIR__ . "/vendor/autoload.php";
 
-    use App\Console\Input;
-    use App\Helpers\Files;
+    use Framework\Console\Input;
+    use Framework\Helpers\Files;
     use Dotenv\Dotenv;
 
     $dotenv = Dotenv::createImmutable(__DIR__);

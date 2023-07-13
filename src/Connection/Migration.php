@@ -1,14 +1,14 @@
 <?php
 
-    namespace App\Connection;
+    namespace Framework\Connection;
 
-use App\Helpers\ErrorHandler;
-use App\Helpers\SuccessHandler;
-    use App\Helpers\Files;
-use App\Helpers\UserInputHandler;
-use App\Helpers\WarningHandler;
-use App\Query\Builder;
-    use App\Query\DatabaseAccess;
+    use Framework\Helpers\ErrorHandler;
+    use Framework\Helpers\SuccessHandler;
+    use Framework\Helpers\Files;
+    use Framework\Helpers\UserInputHandler;
+    use Framework\Helpers\WarningHandler;
+    use Framework\Query\Builder;
+    use Framework\Query\DatabaseAccess;
 
     class Migration{
 
@@ -24,7 +24,7 @@ use App\Query\Builder;
 
         private function deleteTableIfExists($tablesToMigrate){
 
-            $tablesInDB = $this->dbAccess->executeReturnQuery($this->queryBuilder->getAllTablesQuery());
+            $tablesInDB = $this->dbAccess->executeGetAllTablesQuery($this->queryBuilder->getAllTablesQuery()->getQuery());
             $tablesToDelete = [];
 
             if($tablesToMigrate == null){
@@ -56,7 +56,7 @@ use App\Query\Builder;
                 
             }
 
-            $deleteTablesQueries = $this->queryBuilder->deleteTableQueries($tablesToDelete);
+            $deleteTablesQueries = $this->queryBuilder->deleteTableQueries($tablesToDelete)->getQuery();
             
             foreach($deleteTablesQueries as $deleteTablesQuery){
                 $this->dbAccess->executeNoReturnQuery($deleteTablesQuery);
@@ -64,12 +64,11 @@ use App\Query\Builder;
 
         }
 
-
         public function migrateTable($tablesToMigrate = null){  
             
             $this->deleteTableIfExists($tablesToMigrate);
 
-            $queries = $this->queryBuilder->buildTableQueries($tablesToMigrate);
+            $queries = $this->queryBuilder->buildTableQueries($tablesToMigrate)->getQuery();
 
             foreach($queries as $query){
                 $this->dbAccess->executeNoReturnQuery($query);

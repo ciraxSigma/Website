@@ -1,10 +1,10 @@
 <?php
 
-    namespace App\Connection;
+    namespace Framework\Connection;
 
-    use App\Query\DatabaseAccess;
-    use App\Query\Builder;
-    use App\Helpers\SuccessHandler;
+    use Framework\Query\DatabaseAccess;
+    use Framework\Query\Builder;
+    use Framework\Helpers\SuccessHandler;
 
 
     class Delete{
@@ -12,8 +12,7 @@
         private $dbAccess;
         private $queryBuilder;
 
-        public function __construct()
-        {
+        public function __construct(){
             $this->dbAccess = new DatabaseAccess();
             $this->queryBuilder = new Builder();
         }
@@ -23,11 +22,11 @@
             $queries = [];
 
             if($tablesToDelete == null){
-                $getAllTablesQuery = $this->queryBuilder->getAllTablesQuery();
-                $tablesToDelete = $this->dbAccess->executeReturnQuery($getAllTablesQuery);
+                $getAllTablesQuery = $this->queryBuilder->getAllTablesQuery()->getQuery();
+                $tablesToDelete = $this->dbAccess->executeGetAllTablesQuery($getAllTablesQuery);
             }
 
-            $queries = $this->queryBuilder->deleteTableQueries($tablesToDelete);
+            $queries = $this->queryBuilder->deleteTableQueries($tablesToDelete)->getQuery();
             
             
 
@@ -40,7 +39,6 @@
             SuccessHandler::deleteSucceeeded($tablesToDelete);
             
         }
-
 
     }
 

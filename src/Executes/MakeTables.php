@@ -1,6 +1,6 @@
 <?php
 
-    use App\Helpers\Files;
+    use Framework\Helpers\Files;
 
     array_shift($argv);
 
