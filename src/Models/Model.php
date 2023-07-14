@@ -4,18 +4,36 @@
 
     use Framework\Query\DatabaseAccess;
     use Framework\Query\Builder;
+    use Framework\Helpers\Factory;
 
     class Model{
 
         private $dbAccess;
         private $queryBuilder;
+        private $factoryController;
 
-        
         protected $table = '';
 
         public function __construct(){
             $this->dbAccess = new DatabaseAccess();
             $this->queryBuilder = new Builder();
+            $this->factoryController = new Factory();
+        }
+
+        public function factory($count = 1, $factoryConfiguration){
+
+            for($i = 0; $i < $count; $i++){
+
+                $colValues = [];
+                foreach($factoryConfiguration as $key => $value){
+
+                    $colValues[$key] = $this->factoryController->convertFactoryKey($value);
+
+                }
+
+                $this->create($colValues);
+    
+            }
         }
 
         public function getAll($columnsArray = null){

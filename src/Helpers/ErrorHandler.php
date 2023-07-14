@@ -27,6 +27,11 @@
             ErrorHandler::TerminateWithMessage($message);
         }
 
+        public static function factoryKeyDoesntExists($wrongKey){
+            $message = "\e[90m'$wrongKey'\e[0m factory key doesn't exists";
+            ErrorHandler::TerminateWithMessage($message);
+        }
+
     }
 
 ?>
