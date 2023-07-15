@@ -10,6 +10,9 @@
                 if($key == "className"){
                     $tempContent = str_replace("{{className}}", $value, $tempContent);
                 }
+                if($key == "modelName"){
+                    $tempContent = str_replace("{{modelName}}", $value, $tempContent);
+                }
             }
 
             return $tempContent;
@@ -44,7 +47,7 @@
 
         public function writeTableTemplateFile($fileNameWE){
             $fileName = $this->addExtension($fileNameWE);
-            $path = $this->makePath('/database/tables/'). $fileName;
+            $path = $this->makePath('/App/Database/Tables/'). $fileName;
             $tableFile = fopen($path, "w");
 
             $tableFileTemplate = file_get_contents($this->makePath('/src/Templates/TableTemplate.temp'));
@@ -56,7 +59,7 @@
 
         public function writeModelTemplateFile($fileNameWE){
             $fileName = $this->addExtension($fileNameWE);
-            $path = $this->makePath("/models/") . $fileName;
+            $path = $this->makePath("/app/Models/") . $fileName;
 
             $modelFile = fopen($path, "w");
 
@@ -65,6 +68,22 @@
             fwrite($modelFile, $this->resolveTempKeys($modelFileTemplate, array("className" => $fileNameWE)));
 
             fclose($modelFile);
+        }
+
+        public function writeFactoryTemplate($fileNameWE){
+            $fileName = $this->addExtension($fileNameWE);
+            $path = $this->makePath("/app/Database/Factories/") . $fileName;
+            $modelFile = fopen($path, "w");
+
+            $modelFileTemplate = file_get_contents($this->makePath("/src/Templates/FactoryTemplate.temp"));
+            
+            fwrite($modelFile, $this->resolveTempKeys($modelFileTemplate, array("className" => $fileNameWE , "modelName" => $this->breakOnBigLetters($fileNameWE)[0])));
+
+            fclose($modelFile);
+        }
+
+        public function breakOnBigLetters($string){
+            return preg_split("/\B(?=[A-Z])/", $string);
         }
     }
 

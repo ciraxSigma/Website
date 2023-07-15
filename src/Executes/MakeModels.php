@@ -1,6 +1,7 @@
 <?php
 
     use Framework\Helpers\Files;
+    use Framework\Helpers\SuccessHandler;
 
     $fileController = new Files();
 
@@ -11,5 +12,7 @@
     foreach($arguments as $argument){
         $fileController->writeModelTemplateFile($argument);
     }
+
+    SuccessHandler::modelCreationSucceeded($arguments);
 
 ?>

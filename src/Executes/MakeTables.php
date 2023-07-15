@@ -8,7 +8,7 @@
 
     foreach($argv as $argument){
         
-        foreach($fileController->readDir('/database/tables') as $tabeName){
+        foreach($fileController->readDir('/app/Database/Tables') as $tabeName){
             if($argument == $tabeName){
                 echo "This table already Exists. Please enter tables that doesn't exist. \n";
                 exit();

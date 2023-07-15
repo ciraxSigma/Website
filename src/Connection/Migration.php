@@ -29,7 +29,7 @@
 
             if($tablesToMigrate == null){
 
-                $tablesToMigrate = $this->fileController->readDir('/database/tables');
+                $tablesToMigrate = $this->fileController->readDir('/app/Database/Tables');
 
             }
 
@@ -75,7 +75,7 @@
             }
 
             if($tablesToMigrate == null){
-                SuccessHandler::migrationSucceeded($this->fileController->readDir('/database/tables'));
+                SuccessHandler::migrationSucceeded($this->fileController->readDir('/app/Database/Tables'));
             }else{
                 SuccessHandler::migrationSucceeded($tablesToMigrate);
             }

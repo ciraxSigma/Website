@@ -6,6 +6,12 @@
 
     class Factory{
 
+        protected $modelName = "";
+
+        protected $count = 1;
+
+        protected $colValues = [];
+
         private $names = [
             'Johnathon',
             'Anthony',
@@ -112,23 +118,6 @@
             'Ramage'
         ];
 
-        private $passwords = [
-            "forest",
-            "tree",
-            "flower",
-            "sky",
-            "grass",
-            "mountain",
-            "happy",
-            "rotating",
-            "red",
-            "fast",
-            "elastic",
-            "smily",
-            "unbelievable",
-            "infinite"
-        ];
-
         private $emails = [
             "disturbedDesiree41@live.ca",
             "Maggiemushy@home.nl",
@@ -184,7 +173,6 @@
 
         public function convertFactoryKey($key){
 
-
             switch($key){
                 case "name":
                     return $this->names[rand(0, count($this->names)- 1)];
@@ -198,13 +186,34 @@
                 case "email":
                     return $this->emails[rand(0, count($this->emails) - 1)];
                     break;
+                case "rndNum":
+                    return rand(0, 100000);
                 default:
                     ErrorHandler::factoryKeyDoesntExists($key);
             }
 
         }
 
-        
+        public function create(){
+
+            $modelLoc = "App\\Models\\" . $this->modelName;
+            $model = new $modelLoc();
+
+            for($i = 0; $i < $this->count; $i++){
+
+                $colValues = [];
+                foreach($this->colValues as $key => $value){
+
+                    $colValues[$key] = $this->convertFactoryKey($value);
+
+                }
+
+                $model->create($colValues);
+    
+            }
+
+        }
+    
     }
 
 ?>

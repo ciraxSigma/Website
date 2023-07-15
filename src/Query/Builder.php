@@ -22,14 +22,14 @@
             $tableQueries = [];
             
             if($tablesToMigrate == null){
-                $tablesToMigrate = $this->fileController->readDir('/database/tables');
+                $tablesToMigrate = $this->fileController->readDir('/app/Database/Tables');
             }
 
             foreach($tablesToMigrate as $table){
 
                 $tableFileName = $this->fileController->addExtension($table);
 
-                $columnProperties = require($this->fileController->makePath("/database/tables/" . $tableFileName));
+                $columnProperties = require($this->fileController->makePath("/app/Database/Tables/" . $tableFileName));
 
                 $tableQueries[] = $this->resolveTableColumnProperties($columnProperties, lcfirst($table));
             }
@@ -132,7 +132,6 @@
 
             $tableQueries = [];
             $tables = $tablesToDelete;
-
             
 
             foreach($tables as $table){
