@@ -47,7 +47,7 @@
 
         public function writeTableTemplateFile($fileNameWE){
             $fileName = $this->addExtension($fileNameWE);
-            $path = $this->makePath('/App/Database/Tables/'). $fileName;
+            $path = $this->makePath('/app/Database/Tables/'). $fileName;
             $tableFile = fopen($path, "w");
 
             $tableFileTemplate = file_get_contents($this->makePath('/src/Templates/TableTemplate.temp'));
