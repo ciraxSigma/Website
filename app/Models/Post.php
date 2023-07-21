@@ -6,7 +6,7 @@
 
     class Post extends Model{
 
-        protected $table = "example";
+        protected static $table = "posts";
     }
 
 ?>
