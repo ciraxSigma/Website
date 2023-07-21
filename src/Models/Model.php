@@ -2,54 +2,56 @@
 
     namespace Framework\Models;
 
+    require("../../Testing.php");
+
     use Framework\Query\DatabaseAccess;
     use Framework\Query\Builder;
-    use Framework\Helpers\Factory;
 
     class Model{
-
-        private $dbAccess;
-        private $queryBuilder;
-
-        protected $table = '';
 
         public function __construct(){
             $this->dbAccess = new DatabaseAccess();
             $this->queryBuilder = new Builder();
         }
 
-        public function getAll($columnsArray = null){
-            return $this->start($columnsArray)->getData();
+        public function __get($name){
+            return $this->$name;
         }
 
-        public function start($columnsArray = null){
-            $this->queryBuilder->getModelQuery($this->table, $columnsArray);
-            return $this;
+        public function __set($name, $value){
+            $this->$name = $value;
         }
 
-        public function where($columnName, $operator, $value){
-            $this->queryBuilder->where($columnName, $operator, $value);
-            return $this;
+        public static function start($columnsArray = null){
+
+            $builder = Builder::getBuilder();
+
+            $builder->getModelQuery(get_called_class()::$table, $columnsArray);
+
+            return $builder;
         }
 
-        public function and($columnName, $operator, $value){
-            $this->queryBuilder->and($columnName, $operator, $value);
-            return $this;
+
+        public static function create($colValues){
+            
+            $db = DatabaseAccess::getDB();
+            $builder = Builder::getBuilder();
+
+            $db->createRecord($builder->create($colValues, get_called_class()::$table), $colValues);
+            
+            $model = new Model();
+
+            foreach($colValues as $column => $value){
+                $model->$column = $value;
+            }
+
+            return $model;
         }
 
-        public function or($columnName, $operator, $value){
-            $this->queryBuilder->or($columnName, $operator, $value);
-            return $this;
+        public static function print(){
+            echo get_called_class()::$table;
         }
 
-        public function getData(){
-            return $this->dbAccess->getData($this->queryBuilder->getQuery());
-        }
-
-        public function create($colValues){
-            $this->dbAccess->createRecord($this->queryBuilder->create($colValues, $this->table), $colValues);
-        }
 
     }
-
 ?>

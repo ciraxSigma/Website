@@ -3,8 +3,9 @@
 
     namespace Framework\Query;
 
-    use Framework\Helpers\Files;
     use Framework\Helpers\ErrorHandler;
+    use Framework\Query\DatabaseAccess;
+    use Framework\Models\Model;
 
     class Builder{
 
@@ -12,10 +13,21 @@
 
         private $queries;
 
+        private static $builderInstace = null;
+
+        private $dbAccess;
+
         public function __construct(){
-            $this->fileController = new Files();
+            $this->dbAccess = DatabaseAccess::getDB();
         }
-        
+
+        public static function getBuilder(){
+            if(self::$builderInstace == null){
+                self::$builderInstace = new self();
+            }
+
+            return self::$builderInstace;
+        }
 
         public function buildTableQueries($tablesToMigrate = null){
 
@@ -175,6 +187,8 @@
             }else{
                 $this->queries .= "WHERE $columnName $operator $value ";
             }
+
+            return $this;
         }
 
         public function and($columnName, $operator, $value){
@@ -184,6 +198,8 @@
             }else{
                 $this->queries .= "AND $columnName $operator $value ";
             }
+
+            return $this;
         }
 
         public function or($columnName, $operator, $value){
@@ -193,6 +209,8 @@
             }else{
                 $this->queries .= "OR $columnName $operator $value ";
             }
+
+            return $this;
         }
 
         public function create($colValues, $tableName){
@@ -211,6 +229,47 @@
             
             return $query;
         }
+
+        public function get(){
+            
+            $data = $this->dbAccess->getData($this->queries);
+
+            if(count($data) == 1){
+
+                $model = new Model();
+
+                foreach($data[0] as $column => $value){
+
+                    $model->$column = $value;
+                }
+
+                return $model;
+            }
+            else{
+
+
+                $models = [];
+
+                foreach($data as $user){
+
+                    $model = new Model();
+
+                    foreach($user as $column => $value){
+
+                        $model->$column = $value;
+                    }
+
+                    $models[] = $model;
+
+                }
+
+                return $models;
+
+            }
+
+
+        }
+
     }
 
 ?>

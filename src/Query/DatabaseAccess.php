@@ -5,11 +5,13 @@
 
     use mysqli;
     use Exception;
-use Framework\Helpers\ErrorHandler;
+    use Framework\Helpers\ErrorHandler;
 
     class DatabaseAccess{
 
         private $mysqli;
+
+        private static $dbInstace = null;
 
         public function __construct(){
 
@@ -23,6 +25,13 @@ use Framework\Helpers\ErrorHandler;
                 echo "Connection Error: " . $this->mysqli->connect_error;
             }
 
+        }
+
+        public static function getDB(){
+            if(self::$dbInstace == null){
+                self::$dbInstace = new self();
+            }
+            return self::$dbInstace;
         }
 
         public function executeNoReturnQuery($query){
@@ -73,7 +82,11 @@ use Framework\Helpers\ErrorHandler;
 
             }
 
-            return $usersData;
+            if(count($usersData) == 1){
+                return $usersData;
+            }else{
+                return $usersData;
+            }
 
         }
 
