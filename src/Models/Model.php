@@ -2,35 +2,43 @@
 
     namespace Framework\Models;
 
-    require("../../Testing.php");
-
     use Framework\Query\DatabaseAccess;
     use Framework\Query\Builder;
 
     class Model{
 
-        public function __construct(){
-            $this->dbAccess = new DatabaseAccess();
-            $this->queryBuilder = new Builder();
-        }
+        protected $hasManyRels = [];
 
         public function __get($name){
-            return $this->$name;
+
+            if(isset($this->$name)){
+                return $this->$name;
+            }
+            else{
+                return $this->$name();
+            }
         }
 
         public function __set($name, $value){
             $this->$name = $value;
         }
 
+        protected function hasMany($class , $localKey, $foreignKey){
+
+            $builder = Builder::getBuilder();
+
+            return $builder->hasMany(get_called_class()::$table , $class::$table, $localKey, $foreignKey, $this->$localKey);
+            
+        }
+
         public static function start($columnsArray = null){
 
             $builder = Builder::getBuilder();
 
-            $builder->getModelQuery(get_called_class()::$table, $columnsArray);
+            $builder->getModelQuery(get_called_class() ,get_called_class()::$table, $columnsArray);
 
             return $builder;
         }
-
 
         public static function create($colValues){
             
@@ -48,10 +56,7 @@
             return $model;
         }
 
-        public static function print(){
-            echo get_called_class()::$table;
-        }
-
 
     }
+
 ?>

@@ -6,7 +6,8 @@
 
     class Comment extends Model{
 
-        protected static $table = "comment";
+        protected static $table = "comments";
     }
 
+    
 ?>

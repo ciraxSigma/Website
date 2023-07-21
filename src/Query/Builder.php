@@ -17,6 +17,8 @@
 
         private $dbAccess;
 
+        private $currentModel;
+
         public function __construct(){
             $this->dbAccess = DatabaseAccess::getDB();
         }
@@ -163,7 +165,9 @@
             return $this;
         }
 
-        public function getModelQuery($tableName, $columnsArray = null){
+        public function getModelQuery($model, $tableName, $columnsArray = null){
+
+            $this->currentModel = $model;
 
             if($columnsArray == null){
                 $columnsArray[] = '*'; 
@@ -230,23 +234,41 @@
             return $query;
         }
 
+        public function hasMany($leftTable, $rightTable, $leftKey, $rightKey, $condition){
+
+            $this->queries = "SELECT $rightTable.* FROM $leftTable INNER JOIN $rightTable ON $leftTable.$leftKey = $rightTable.$rightKey WHERE $leftTable.$leftKey = $condition";
+
+            $data = $this->get();
+
+            if(is_array($data)){
+                return $data;
+            }
+            else{
+                return array($data);
+            }
+        }
+
         public function get(){
-            
+
             $data = $this->dbAccess->getData($this->queries);
+
 
             if(count($data) == 1){
 
-                $model = new Model();
+
+                $modelName = $this->currentModel;
+
+                $model = new $modelName();
 
                 foreach($data[0] as $column => $value){
 
                     $model->$column = $value;
                 }
 
+
                 return $model;
             }
             else{
-
 
                 $models = [];
 
