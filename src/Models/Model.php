@@ -27,8 +27,16 @@
 
             $builder = Builder::getBuilder();
 
-            return $builder->hasMany(get_called_class()::$table , $class::$table, $localKey, $foreignKey, $this->$localKey);
+            return $builder->hasMany(get_called_class()::$table , $class::$table, $class ,$localKey, $foreignKey, $this->$localKey);
             
+        }
+
+        protected function belongsTo($class, $localKey, $foreignKey){
+            
+            $builder = Builder::getBuilder();
+
+            return $builder->belongsTo(get_called_class()::$table, $class::$table, $class, $localKey, $foreignKey, $this->$localKey);
+
         }
 
         public static function start($columnsArray = null){

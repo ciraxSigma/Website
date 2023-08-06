@@ -2,13 +2,16 @@
 
     namespace App\Models;
 
-
     use Framework\Models\Model;
-
     use App\Models\Post;
-    use App\Models\Comment;
 
     class User extends Model{
+
+        public function posts(){
+
+            return $this->hasMany(Post::class, "id", "userId");
+
+        }
 
         protected static $table = "users";
         

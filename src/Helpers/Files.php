@@ -82,6 +82,19 @@
             fclose($modelFile);
         }
 
+        public function writeControllerTemplate($fileNameWE){
+            $fileName = $this->addExtension($fileNameWE);
+            $path = $this->makePath("/app/Controllers/" . $fileName);
+
+            $controllerFile = fopen($path, "w");
+
+            $controllerFileTemplate = file_get_contents($this->makePath("/src/Templates/ControllerTemplate.temp"));
+
+            fwrite($controllerFile, $this->resolveTempKeys($controllerFileTemplate, array("className" => $fileNameWE)));
+
+            fclose($controllerFile);
+        }
+
         public function breakOnBigLetters($string){
             return preg_split("/\B(?=[A-Z])/", $string);
         }

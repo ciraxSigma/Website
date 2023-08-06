@@ -42,6 +42,13 @@
             }
         }
 
+        public static function controllerCreationSucceeded($controllersNames){
+            foreach($controllersNames as $controllerName){
+                $message = "Controller '\e[90m$controllerName\e[0m'  was successfullly created";
+                SuccessHandler::successMessage($message);
+            }
+        }
+
     }
 
 ?>

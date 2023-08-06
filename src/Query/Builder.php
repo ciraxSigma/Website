@@ -4,6 +4,7 @@
     namespace Framework\Query;
 
     use Framework\Helpers\ErrorHandler;
+    use Framework\Helpers\Files;
     use Framework\Query\DatabaseAccess;
     use Framework\Models\Model;
 
@@ -20,6 +21,7 @@
         private $currentModel;
 
         public function __construct(){
+            $this->fileController = new Files();
             $this->dbAccess = DatabaseAccess::getDB();
         }
 
@@ -74,6 +76,9 @@
                         case "varchar":
                             $currentTypeArr["type"] = "varchar (255)";
                             break;
+                        case "text":
+                            $currentTypeArr['type'] = "TEXT";
+                            break;
                         case "key":
                             $currentTypeArr["key"] = "PRIMARY KEY($columnName)";
                             break;
@@ -83,6 +88,7 @@
                         case "nullable":
                             $currentTypeArr["nullable"] = "NULL";
                             break;
+
                         default:
                             ErrorHandler::ColumnValidationError($tableName, $columnName, $propertiesString);
                             
@@ -234,61 +240,60 @@
             return $query;
         }
 
-        public function hasMany($leftTable, $rightTable, $leftKey, $rightKey, $condition){
+        public function hasMany($leftTable, $rightTable, $model, $leftKey, $rightKey, $identifier){
 
-            $this->queries = "SELECT $rightTable.* FROM $leftTable INNER JOIN $rightTable ON $leftTable.$leftKey = $rightTable.$rightKey WHERE $leftTable.$leftKey = $condition";
+            $this->currentModel = $model;
 
-            $data = $this->get();
+            $this->queries = "SELECT $rightTable.* FROM $leftTable INNER JOIN $rightTable ON $leftTable.$leftKey = $rightTable.$rightKey WHERE $leftTable.$leftKey = $identifier ";
 
-            if(is_array($data)){
-                return $data;
-            }
-            else{
-                return array($data);
-            }
+            return $this->get();
         }
 
-        public function get(){
+        public function belongsTo($leftTable, $rightTable, $model, $leftKey, $rightKey, $identifier){
+
+            $this->currentModel = $model;
+
+            $this->queries = "SELECT $rightTable.* FROM $leftTable INNER JOIN $rightTable ON $leftTable.$leftKey = $rightTable.$rightKey WHERE $leftTable.$leftKey = $identifier LIMIT 1 ";
+
+            return $this->get(true);
+        }
+
+        public function get($returnArr = false){
 
             $data = $this->dbAccess->getData($this->queries);
 
+            $models = [];
 
-            if(count($data) == 1){
+            $modelName = $this->currentModel;
 
-
-                $modelName = $this->currentModel;
+            if($returnArr){
 
                 $model = new $modelName();
 
                 foreach($data[0] as $column => $value){
 
                     $model->$column = $value;
-                }
 
+                }
 
                 return $model;
             }
-            else{
 
-                $models = [];
 
-                foreach($data as $user){
+            foreach($data as $user){
 
-                    $model = new Model();
+                $model = new $modelName();
 
-                    foreach($user as $column => $value){
+                foreach($user as $column => $value){
 
-                        $model->$column = $value;
-                    }
-
-                    $models[] = $model;
-
+                    $model->$column = $value;
                 }
 
-                return $models;
+                $models[] = $model;
 
             }
 
+            return $models;
 
         }
 
