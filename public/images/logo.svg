@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="132mm"
+   height="105mm"
+   viewBox="0 0 132 105"
+   version="1.1"
+   id="svg5"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs2" />
+  <g
+     id="layer1"
+     transform="matrix(0.9573325,0,0,0.9573325,-36.917008,-10.947051)">
+    <path
+       style="fill:#ea63ff;fill-opacity:1;stroke:#ebcf00;stroke-width:10.0359;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="path60445"
+       d="M 198.64889,208.40365 77.938753,148.78548 -42.771378,89.167314 69.21454,14.438352 l 111.98591,-74.728957 8.72422,134.34713 z"
+       transform="matrix(-0.39811431,-0.24434892,0.26829633,-0.36257971,131.4525,140.44275)" />
+    <text
+       xml:space="preserve"
+       style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:31.7822px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif Italic';fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.794556"
+       x="78.219299"
+       y="101.15002"
+       id="text40863"><tspan
+         id="tspan40861"
+         style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:sans-serif;-inkscape-font-specification:'sans-serif Italic';fill:#ffcc00;stroke:#000000;stroke-width:0.794556;stroke-opacity:1"
+         x="75.219299"
+         y="101.15002">PHP</tspan></text>
+  </g>
+</svg>

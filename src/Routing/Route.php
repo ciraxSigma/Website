@@ -4,7 +4,7 @@
 
     class Route{
 
-        public static function get($route, $class, $action){
+        public static function get($route, $callable, $action = null){
             
             if($_SERVER["REQUEST_METHOD"] != "GET"){
                 return;
@@ -51,12 +51,17 @@
 
             }
 
+            if($action == null && "/" . implode("/", $routeParts) == $uri){
+                $callable();
+                exit();
+            }
+
 
             if("/" . implode("/", $routeParts) == $uri){
 
                $_SESSION["LATEST_GET_URI"] = $uri;
 
-               $controller = new $class();
+               $controller = new $callable();
 
                $controller->$action($arguments);
 
@@ -64,6 +69,8 @@
             }
 
         }
+
+
 
         public static function post($route, $class, $action){
             
