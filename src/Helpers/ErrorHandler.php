@@ -32,6 +32,15 @@
             ErrorHandler::TerminateWithMessage($message);
         }
 
+        public static function downloadsExists(){
+            $message = "\e[90mDownloads\e[0m folder already exists";
+            ErrorHandler::TerminateWithMessage($message);
+        }
+
+        public static function uploadsExist(){
+            $message = "\e[90mUploads\e[0m folder already exists";
+            ErrorHandler::TerminateWithMessage($message);
+        }
     }
 
 ?>

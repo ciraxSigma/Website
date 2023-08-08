@@ -98,6 +98,7 @@
         public function breakOnBigLetters($string){
             return preg_split("/\B(?=[A-Z])/", $string);
         }
+
     }
 
 ?>

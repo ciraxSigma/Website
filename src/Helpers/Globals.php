@@ -59,4 +59,16 @@
         }
 
     }
+
+    function get($argumentName){
+
+        if(isset($_GET[$argumentName])){
+            return $_GET[$argumentName];
+        }else{
+            exit();
+        }
+
+    }
+
+
 ?>

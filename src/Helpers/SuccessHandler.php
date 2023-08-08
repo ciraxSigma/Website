@@ -4,7 +4,7 @@
 
     class SuccessHandler{
 
-        public static function successMessage($message){
+        private static function successMessage($message){
             echo "\e[32mSuccess: \e[0m" . $message . " \n";
         }
 
@@ -47,6 +47,16 @@
                 $message = "Controller '\e[90m$controllerName\e[0m'  was successfullly created";
                 SuccessHandler::successMessage($message);
             }
+        }
+
+        public static function downlaodsCreated(){
+            $message = "\e[90mDownloads\e[0m folder successfully created";
+            SuccessHandler::successMessage($message);
+        }
+
+        public static function uploadsCreated(){
+            $message = "\e[90mUploads\e[0m folder successfully created";
+            SuccessHandler::successMessage($message);
         }
 
     }

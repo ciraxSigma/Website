@@ -10,7 +10,17 @@
                 return;
             }
 
-            $uri = $_SERVER["REQUEST_URI"];
+            if($argumentBeginning = strpos($_SERVER["REQUEST_URI"], "?")){
+                
+                $uri = substr($_SERVER["REQUEST_URI"],0, $argumentBeginning);
+            }
+            else{
+
+                $uri = $_SERVER["REQUEST_URI"];
+
+            }
+
+
 
             $uriParts = explode('/', $uri);
             array_shift($uriParts);
@@ -72,7 +82,7 @@
 
 
 
-        public static function post($route, $class, $action){
+        public static function post($route, $callable, $action = null ){
             
             if($_SERVER["REQUEST_METHOD"] != "POST"){
                 return;
@@ -80,9 +90,14 @@
 
             $uri = $_SERVER["REQUEST_URI"];
 
+            if($action == null && $route == $uri){
+                $callable();
+                exit();
+            }
+
             if($uri == $route){
 
-                $controller = new $class();
+                $controller = new $callable();
 
                 $controller->$action($_POST);
 

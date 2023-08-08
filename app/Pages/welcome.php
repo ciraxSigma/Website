@@ -21,7 +21,7 @@
 
         p {
             color: white;
-            margin-top: 60px;
+            margin-top: 100px;
             font-family: 'Ubuntu', sans-serif;
             font-weight: 500;
             font-size: 1.4rem;
@@ -51,6 +51,7 @@
         }
 
         .logo {
+            transform-origin: 50% 60%;
             animation: rotation 4s infinite linear;
         }
 
@@ -58,7 +59,6 @@
             from {transform: rotate(0deg);}
             to {transform: rotate(360deg);}
         }
-
 
         </style>
 
@@ -73,10 +73,7 @@
                 <div class="shadow-center"></div>
             </div>
 
-            <p class="description">This is Simple PHP Library which is inspired by Laravel framework.</p>
-
-
-
+            <p class="description">This is Simple PHP Library inspired by Laravel framework.</p>
 
         </div>
 
