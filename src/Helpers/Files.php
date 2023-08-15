@@ -99,6 +99,12 @@
             return preg_split("/\B(?=[A-Z])/", $string);
         }
 
+        public function convertComponentToPath($componentName){
+
+            return str_replace(".", "/", $componentName);
+
+        }
+
     }
 
 ?>

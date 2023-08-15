@@ -1,15 +1,25 @@
 <?php
 
     use Framework\Helpers\Validator;
+    use Framework\Helpers\Files;
+    use Framework\Helpers\Linker;
 
     session_start();
 
     function view($page, $data = null){
 
-        if($data != null){
-            extract($data);
-        }
-        return require("../app/Pages/$page" . ".php");
+        $fileController = new Files();
+        $linker = new Linker();
+
+        $pagePath = $fileController->makePath("/app/Pages/$page" . ".php");
+
+
+        $page = $linker->link(file_get_contents($pagePath), $data);
+
+        $page = eval("?>" . $page . "<?php ");
+
+        echo $page;
+
     }
 
     function redirect($url){
@@ -69,6 +79,8 @@
         }
 
     }
+
+    
 
 
 ?>

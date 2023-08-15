@@ -113,7 +113,32 @@
 
         }
 
+        public static function computer($callback){
+
+            if(!Route::isMobile()){
+
+                $callback();
+
+            }
+
+        }
+
+        public static function phone($callback){
+            if(Route::isMobile()){
+
+                $callback();
+
+            }
+        }
+
+        private static function isMobile(){
+
+            return preg_match('/^.*[mM]obile.*/',$_SERVER["HTTP_USER_AGENT"]);
+
+        }
 
     }
+
+
 
 ?>
