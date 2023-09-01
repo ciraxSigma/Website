@@ -9,17 +9,16 @@
     function view($page, $data = null){
 
         $fileController = new Files();
+        
         $linker = new Linker();
 
         $pagePath = $fileController->makePath("/app/Pages/$page" . ".php");
 
-
         $page = $linker->link(file_get_contents($pagePath), $data);
-
+    
         $page = eval("?>" . $page . "<?php ");
 
         echo $page;
-
     }
 
     function redirect($url){

@@ -3,6 +3,7 @@
     namespace Framework\Helpers;
 
     use Framework\Helpers\Files;
+    use Framework\Helpers\RegexHelper;
 
     class Linker{
 
@@ -24,7 +25,11 @@
                 $page = $this->resolveComponents($page);
             }
 
+
+
+
             $page = $this->resolvePageParams($page, $data);
+
 
 
             return $page;
@@ -40,17 +45,14 @@
 
                 $match = $matches[1][$i];
 
+
                 $componentName = $this->extractComponentName($match);
 
-                $componentPath = $this->fileController->convertComponentToPath($componentName);
 
                 $componentArgs = $this->extractComponentAttributes($match, $componentName, $page);
 
-                $componentString = file_get_contents($this->fileController->makePath("/app/Pages/components/$componentPath.php"));
 
-                $componentString = $this->resolveComponents($componentString);
-
-                $page = str_replace("<x-$match>" . $componentArgs['children'] . "</x-$componentName>", $this->resolveComponentParams($componentString, $componentArgs) ,$page);
+                $page = $this->resolveComponentString($match, $componentArgs, $componentName, $page);
 
             }
 
@@ -62,6 +64,7 @@
 
             $matches = array();
 
+
             if($params != null){
                 extract($params);
             }
@@ -69,7 +72,6 @@
             preg_match_all("/{{([$][\w_]+)}}/", $componentString, $matches);
 
             for($i = 0; $i < count($matches[1]); $i++){
-
 
                 $match = $matches[1][$i];
 
@@ -95,16 +97,22 @@
 
             $matches = array();
 
-            preg_match_all("/{{([$][\w]+)}}/", $page, $matches);
+            preg_match_all("/{{([^{}]+)}}/", $page, $matches);
 
 
             for($i = 0; $i < count($matches[1]); $i++){
 
                 $match = $matches[1][$i];
 
-                $regexSearch = "{{".$match."}}";
 
+                $regexSearch = "";
+
+
+                $regexSearch = "{{".$match."}}";
+                
+                
                 eval("\$variable = $match;");
+
 
                 $page = str_replace($regexSearch, $variable, $page);
                 
@@ -127,24 +135,44 @@
 
             $temp = str_replace("/", '.', $componentName);
 
-            $match = str_replace("$", "\\$", $match);
+            $pattern = RegexHelper::preparePattern($match);
 
-            preg_match("/<x-$match>([^\0]*)<\/x-$temp>/", $page, $searchResult);
-
-            $componentArgs["children"] = $searchResult[1];
+            if(preg_match("/<x-$pattern>([\p{Any}]*?)<\/x-$temp>/", $page, $searchResult)){
+                $componentArgs["children"] = $searchResult[1];
+            }
+            else{
+                $componentArgs["children"] = null;
+            }
 
             return $componentArgs;
         }
 
-
         private function extractComponentName($string){
 
-            preg_match("/\b([\w.]+)/", $string, $searchResult);
+            preg_match("/\b([\w.-]+)/", $string, $searchResult);
 
             return $searchResult[1];
 
         }
 
+        private function resolveComponentString($match, $componentArgs, $componentName, $page){
+
+
+            $componentPath = $this->fileController->convertComponentToPath($componentName);
+
+            $componentString = file_get_contents($this->fileController->makePath("/app/Pages/components/$componentPath.php"));         
+
+            $componentString = $this->resolveComponents($componentString);
+
+
+            if($componentArgs['children'] != null){
+                return str_replace("<x-$match>" . $componentArgs['children'] . "</x-$componentName>", $this->resolveComponentParams($componentString, $componentArgs) ,$page);
+            }
+            else{
+                return str_replace("<x-$match>", $this->resolveComponentParams($componentString, $componentArgs) ,$page);
+            }
+            
+        }
     }
 
 ?>
