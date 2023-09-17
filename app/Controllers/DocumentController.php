@@ -4,16 +4,14 @@
 
     use Framework\Helpers\Download;
 
-    class DownloadController {
+    class DocumentController {
 
         public function index(){
-
 
             $download = new Download();
 
             $download->download(get("file"));
-        
-            
+
         }
 
     }

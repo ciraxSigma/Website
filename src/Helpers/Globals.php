@@ -89,6 +89,29 @@
         return Route::isMobile();
     }
 
+    function auth(){
+        if(isset($_SESSION["AUTH_USER"])){
+            return $_SESSION["AUTH_USER"];
+        }
+        else {
+            return false;
+        }
+        
+    }
+
+    function login($usrObj) {
+
+        $_SESSION["AUTH_USER"] = $usrObj;
+        
+    }
+
+    function logout(){
+        unset($_SESSION["AUTH_USER"]);
+    }
+
+    function latestUri(){
+        return $_SESSION["LATEST_GET_URI"];
+    }
 
 
 ?>

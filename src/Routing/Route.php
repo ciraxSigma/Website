@@ -2,7 +2,12 @@
 
     namespace Framework\Routing;
 
+    use Framework\Routing\Middleware;
+
+
     class Route{
+
+        
 
         public static function get($route, $callable, $action = null){
             
@@ -34,13 +39,12 @@
                 return;
             }
 
-
-            if(preg_match("/\[.*\]/", $route)){   
+            if(preg_match("/\[\p{Any}\]/", $route)){   
                             
                 for($i = 0; $i < count($routeParts); $i++){
 
 
-                    if(!preg_match("/\[.*\]/", $routeParts[$i])){
+                    if(!preg_match("/\[\p{Any}]/", $routeParts[$i])){
 
                         if($uriParts[$i] == $routeParts[$i]){
                             continue;
@@ -66,6 +70,7 @@
                 $_SESSION["LATEST_GET_URI"] = $uri;
                 
                 $callable();
+
                 exit();
             }
 
@@ -106,6 +111,16 @@
 
                 exit();
             }
+        }
+
+        public static function group($accessType, $callable){
+
+            $middleWare = new Middleware();
+
+            $middleWare->middleware($accessType);
+
+            $callable();
+
         }
 
         public static function put($route){

@@ -247,6 +247,8 @@
                     © 2023 Lazar Ciric. All Rights Reserved
             </p>
 
+            <a class="documents-link" href="/login"><button class="documents-button">Documents</button></a>
+
         </section>
 
     </div>

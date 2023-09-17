@@ -41,6 +41,13 @@
             return $fileNamesWithoutExetensions;
         }
 
+        public function readDirWithExt($path){
+            $fileNames = array_diff(scandir($this->getBasePath() . $path), array('..', '.'));
+            return $fileNames;
+        }
+
+
+
         public function makePath($path){
             return $this->getBasePath() . $path;
         }
