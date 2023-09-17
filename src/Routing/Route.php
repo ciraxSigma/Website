@@ -62,6 +62,9 @@
             }
 
             if($action == null && "/" . implode("/", $routeParts) == $uri){
+
+                $_SESSION["LATEST_GET_URI"] = $uri;
+                
                 $callable();
                 exit();
             }
@@ -131,7 +134,7 @@
             }
         }
 
-        private static function isMobile(){
+        public static function isMobile(){
 
             return preg_match('/^.*[mM]obile.*/',$_SERVER["HTTP_USER_AGENT"]);
 

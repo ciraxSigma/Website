@@ -53,6 +53,13 @@
                         $this->errorMessages[$key] = "Invalid email address";
                         break;
                     }
+                case 'notEmpty':
+                    if(strlen($data) == 0){
+                        $this->errorMessages[$key] = "Field must not be empty";
+                    }
+                    else{
+                        $this->validatedData[$key] = $data;
+                    }
 
             }
 

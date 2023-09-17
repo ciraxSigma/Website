@@ -3,28 +3,35 @@
     use Framework\Helpers\Validator;
     use Framework\Helpers\Files;
     use Framework\Helpers\Linker;
+    use Framework\Routing\Route;
 
     session_start();
 
     function view($page, $data = null){
 
+        if($data != null){
+            extract($data);
+        }
+
+        //header("Content-Type: text/plain");
         $fileController = new Files();
         
         $linker = new Linker();
 
         $pagePath = $fileController->makePath("/app/Pages/$page" . ".php");
 
-        $page = $linker->link(file_get_contents($pagePath), $data);
-    
+        $page = file_get_contents($pagePath);
+
+        $page = $linker->link(file_get_contents($pagePath), $data); 
+
+        $endTime = microTime(true);
+        
         $page = eval("?>" . $page . "<?php ");
 
-        echo $page;
     }
 
-    function redirect($url){
-        
-        header("Location: $url");
-
+    function redirect($url, $data = null){
+        header("Location: " . $url);
     }
 
     function validate($data, $conditions){
@@ -34,7 +41,6 @@
         $validator = new Validator();
 
         foreach($conditions as $key => $value){
-
 
             $validator->validateKey($key, $data[$key], $value);
 
@@ -79,7 +85,10 @@
 
     }
 
-    
+    function isMobile(){
+        return Route::isMobile();
+    }
+
 
 
 ?>

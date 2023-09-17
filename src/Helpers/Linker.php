@@ -16,23 +16,71 @@
         }
 
         public function link($page, $data){
-            
-
+    
             $componentsPath = $this->fileController->makePath("/app/Pages/components");
 
+            $page = $this->resolvePageConditions($page, $data);
 
             if(file_exists($componentsPath)){
                 $page = $this->resolveComponents($page);
             }
 
-
-
-
             $page = $this->resolvePageParams($page, $data);
 
-
-
             return $page;
+        }
+
+        private function resolvePageConditions($page, $data){
+
+            if($data != null){
+                extract($data);
+            }
+
+            $ifMatches = [];
+            $foreachMatches = [];
+            $errorMatches = [];
+
+            preg_match_all("/@if([\p{Any}]+?)\)[\n\r\t]/", $page, $ifMatches);
+            preg_match_all("/@foreach([\p{Any}]+?)\)[\n\r\t]/", $page, $foreachMatches);
+            preg_match_all("/(@error\(\"([^*]+?)\"\)([^*]+?)@enderror)/", $page, $errorMatches);
+
+
+            for($i = 0; $i < count($ifMatches[1]); $i++){
+                $ifMatches[1][$i] .= ")";
+
+                $page = str_replace("@if" . $ifMatches[1][$i], "<?php if" . $ifMatches[1][$i] . ": ?>", $page);
+            }
+
+            for($i = 0; $i < count($foreachMatches[1]); $i++){
+
+                $foreachMatches[1][$i] .= ")";
+
+
+                $page = str_replace("@foreach" . $foreachMatches[1][$i], "<?php foreach" . $foreachMatches[1][$i] . ": ?>", $page);
+            }
+
+            for($i = 0; $i < count($errorMatches[1]); $i++){
+
+                if(isset($_SESSION['VALIDATION_FAILS'][$errorMatches[2][$i]])){
+                    $errorMatches[3][$i] = str_replace("{{\$message}}", "<?php echo \$_SESSION['VALIDATION_FAILS']['" . $errorMatches[2][$i] . "'] ?>", $errorMatches[3][$i]);
+                    $page = str_replace($errorMatches[0][$i], $errorMatches[3][$i], $page);
+                }
+                else{
+                    $page = str_replace($errorMatches[0][$i], "", $page);
+                }
+
+
+            }
+
+            $page = str_replace("@else", "<?php else: ?>", $page);
+
+            $page = str_replace("@endif", "<?php endif; ?>", $page);
+
+            $page = str_replace("@endforeach", "<?php endforeach; ?>", $page);   
+            
+            return $page;
+
+
         }
 
         private function resolveComponents($page){
@@ -60,10 +108,38 @@
             
         }
 
+        // private function resolveComponentParams($componentString, $params){
+
+        //     $matches = array();
+
+
+        //     if($params != null){
+        //         extract($params);
+        //     }
+
+        //     preg_match_all("/{{([$][\w_]+)}}/", $componentString, $matches);
+
+        //     for($i = 0; $i < count($matches[1]); $i++){
+
+        //         $match = $matches[1][$i];
+
+        //         echo $match;
+
+        //         $regexSearch = "{{".$match."}}";
+                
+        //         eval("\$variable = $match;");
+                
+        //         $componentString = str_replace($regexSearch, $variable , $componentString);
+                
+        //     }
+
+        //     return $componentString;
+
+        // }
+
         private function resolveComponentParams($componentString, $params){
 
             $matches = array();
-
 
             if($params != null){
                 extract($params);
@@ -87,6 +163,39 @@
 
         }
 
+        // private function resolvePageParams($page, $data){
+
+        //     if($data != null){
+
+        //         extract($data);
+
+        //     }
+
+        //     $matches = array();
+
+        //     preg_match_all("/{{([^{}]+)}}/", $page, $matches);
+
+
+        //     for($i = 0; $i < count($matches[1]); $i++){
+
+        //         $match = $matches[1][$i];
+
+
+        //         $regexSearch = "";
+
+
+        //         $regexSearch = "{{".$match."}}";
+                
+                
+        //         eval("\$variable = $match;");
+
+
+        //         $page = str_replace($regexSearch, $variable, $page);
+                
+        //     }
+
+        //     return $page;
+        // }
         private function resolvePageParams($page, $data){
 
             if($data != null){
@@ -99,22 +208,13 @@
 
             preg_match_all("/{{([^{}]+)}}/", $page, $matches);
 
-
             for($i = 0; $i < count($matches[1]); $i++){
 
                 $match = $matches[1][$i];
 
+                $stringToSearch = "{{" . $match . "}}";
 
-                $regexSearch = "";
-
-
-                $regexSearch = "{{".$match."}}";
-                
-                
-                eval("\$variable = $match;");
-
-
-                $page = str_replace($regexSearch, $variable, $page);
+                $page = str_replace($stringToSearch, "<?php echo $match; ?>", $page);
                 
             }
 
@@ -163,7 +263,6 @@
             $componentString = file_get_contents($this->fileController->makePath("/app/Pages/components/$componentPath.php"));         
 
             $componentString = $this->resolveComponents($componentString);
-
 
             if($componentArgs['children'] != null){
                 return str_replace("<x-$match>" . $componentArgs['children'] . "</x-$componentName>", $this->resolveComponentParams($componentString, $componentArgs) ,$page);

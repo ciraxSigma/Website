@@ -1,71 +1,31 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="en">
     <head>
-        <title>SimplePHPLib</title>
-        <link rel="icon" type="image/x-icon" href="/images/logo.svg">
 
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="Biography of Lazar Ciric and his experiences in web development">
+        <meta name="keywords" content="web, programming, coding, HTML, html, css, JavaScript, js, PHP, MySQL, jQuery, React, NextJS, web-devlopment, front-end, back-end, development, websites, internet" >
+        <meta name="author" content="Lazar Ciric" >
+        <meta property="og:image" content="images/non-vector/circle-img.png">
+        <meta property="og:title" content="Lazar Ciric - Web Developer">
+        <meta property="og:description" content="Biography of Lazar Ciric and his experiences in web development">
+        <meta property="og:url" content="https://lazarciric.com">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <link rel="icon" href="images/non-vector/logo.png" type="image/x-icon">
+        <link rel="stylesheet" href="src/styles.css" />
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;500&display=swap" rel="stylesheet">
-
-        <style>
-
-        * {
-            margin: 0;
-            padding: 0;
-        }
-
-        body {
-            background-color: #2e2e2e;
-        }
-
-        p {
-            color: white;
-            margin-top: 100px;
-            font-family: 'Ubuntu', sans-serif;
-            font-weight: 500;
-            font-size: 1.4rem;
-        }
-
-        .main-container {
-            flex-direction: column;
-            display: flex;
-            align-items: center;
-            margin-top: 27vh;
-        }
-
-        .image-container {
-            position: relative;
-        }
-
-        .shadow-center{
-            position: absolute;
-            border-radius: 50%;
-            left: 48%;
-            top: 55%;
-            box-shadow: 0 0 150px 70px #17d4ff;
-            width: 1px;
-            height: 1px;
-            z-index: -1;
-
-        }
-
-        .logo {
-            transform-origin: 50% 60%;
-            animation: rotation 4s infinite linear;
-        }
-
-        @keyframes rotation {
-            from {transform: rotate(0deg);}
-            to {transform: rotate(360deg);}
-        }
-
-        </style>
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Ubuntu:wght@400;500;700&display=swap" rel="stylesheet"> 
+        <title>Lazar Ciric - Web Developer</title>
 
     </head>
-
     <body>
+        
         {{$children}}
+
+        <script src="src/animations.js"></script>
+
     </body>
 </html>
